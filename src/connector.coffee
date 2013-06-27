@@ -174,6 +174,7 @@ module.exports = class Connector extends EventEmitter
   #     - `dnd` (Do not disturb)
   #  - `status`: Status message to display
   setAvailability: (availability, status) ->
+    @availability = availability
     packet = new xmpp.Element "presence", type: "available"
     packet.c("show").t(availability)
     packet.c("status").t(status) if (status)
@@ -372,7 +373,7 @@ onOnline = ->
   @setAvailability "chat"
 
   ping = =>
-    @jabber.send " "
+    @setAvailability @availabitity
     @emit "ping"
 
   @keepalive = setInterval ping, 30000
